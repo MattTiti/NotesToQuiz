@@ -32,10 +32,7 @@ const ButtonCheckout = ({ priceId, mode = "payment" }) => {
   };
 
   return (
-    <Button
-      className="w-full p-6 group bg-white text-neutral-700 border border-yellow-500 hover:bg-neutral-100"
-      onClick={() => handlePayment()}
-    >
+    <Button className="w-full p-6 group" onClick={() => handlePayment()}>
       {isLoading ? (
         <span className="loading loading-spinner loading-xs"></span>
       ) : (
