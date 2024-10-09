@@ -160,7 +160,7 @@ export default function QuizGenerator() {
                       <li>Advanced question types</li>
                       <li>Priority support</li>
                     </ul>
-                    <ButtonCheckout priceId={config.stripe.priceId} />
+                    <ButtonCheckout priceId={config.stripe.plans[0].priceId} />
                   </div>
                 </CardContent>
               </Card>

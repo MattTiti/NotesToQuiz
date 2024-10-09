@@ -16,11 +16,9 @@ export default function Home() {
         <Header />
       </Suspense>
       <main className="bg-yellow-50">
-        <Hero />
         <WithWithout />
         <FeaturesAccordion />
         <Highlight />
-        <Pricing />
         <FAQ />
       </main>
       <Footer />
