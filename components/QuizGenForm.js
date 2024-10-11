@@ -37,12 +37,17 @@ export default function QuizGenForm({
 
   return (
     <Tabs defaultValue="file" className="mb-8">
+      <div className="flex justify-center items-center w-full">
+        <Badge className="bg-rose-600 hover:bg-rose-600 mb-4 sm:hidden w-full justify-center">
+          NO ADS. NO PAYMENT REQUIRED.
+        </Badge>
+      </div>
       <div className="flex justify-between items-center">
         <TabsList>
           <TabsTrigger value="file">Upload File</TabsTrigger>
           <TabsTrigger value="text">Input Text</TabsTrigger>
         </TabsList>
-        <Badge className="bg-rose-600 hover:bg-rose-600">
+        <Badge className="bg-rose-600 hover:bg-rose-600 hidden sm:block">
           NO ADS. NO PAYMENT REQUIRED.
         </Badge>
       </div>
@@ -74,29 +79,30 @@ export default function QuizGenForm({
                 </div>
               </>
             )}
-            <div className="flex justify-between items-center mt-4 ">
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2">
               {generatedQuiz && (
                 <Button
                   onClick={() => setIsQuizDialogOpen(true)}
-                  className="bg-blue-600 hover:bg-blue-600/90"
+                  className="bg-blue-600 hover:bg-blue-600/90 w-full sm:w-auto"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   View Last Quiz
                 </Button>
               )}
-              <div className="flex justify-end w-full gap-2 items-center">
+              <div className="flex justify-between sm:justify-end w-full gap-2">
                 <Button
                   variant="outline"
                   onClick={() => {
                     setText("");
                     setGeneratedQuiz(null);
                   }}
+                  className="w-full sm:w-auto"
                 >
                   Clear
                 </Button>
                 <Button
                   onClick={handleTextSubmit}
-                  className="bg-blue-600 hover:bg-blue-600/90"
+                  className="bg-indigo-600 hover:bg-indigo-600/90 w-full sm:w-auto"
                   disabled={!text || loading}
                 >
                   <WandSparkles className="w-4 h-4 mr-2" />
@@ -163,29 +169,30 @@ export default function QuizGenForm({
                 </label>
               )}
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
               {generatedQuiz && (
                 <Button
                   onClick={() => setIsQuizDialogOpen(true)}
-                  className="bg-blue-600 hover:bg-blue-600/90"
+                  className="bg-blue-600 hover:bg-blue-600/90 w-full sm:w-auto"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   View Last Quiz
                 </Button>
               )}
-              <div className="flex justify-end mt-4 w-full gap-2">
+              <div className="flex justify-between sm:justify-end w-full gap-2">
                 <Button
                   variant="outline"
                   onClick={() => {
                     setFile(null);
                     setGeneratedQuiz(null);
                   }}
+                  className="w-full sm:w-auto"
                 >
                   Clear
                 </Button>
                 <Button
                   onClick={handleFileSubmit}
-                  className="bg-indigo-600 hover:bg-indigo-600/90"
+                  className="bg-indigo-600 hover:bg-indigo-600/90 w-full sm:w-auto"
                   disabled={!file || loading}
                 >
                   <WandSparkles className="w-4 h-4 mr-2" />

@@ -19,10 +19,10 @@ const GenerationHeader = ({
 }) => {
   return (
     <CardHeader className="pb-1 space-y-0">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <CardTitle>Generate a Quiz</CardTitle>
 
-        <div className="flex w-1/4 gap-2">
+        <div className="flex sm:w-1/4 gap-2">
           <Select value={quizType} onValueChange={setQuizType}>
             <SelectTrigger>
               <SelectValue placeholder="Select quiz type" />
@@ -55,7 +55,7 @@ const GenerationHeader = ({
           </Select>
         </div>
       </div>
-      <span className="text-sm text-muted-foreground ml-1">
+      <span className="text-xs sm:text-sm text-muted-foreground ml-1">
         {hasFreeGeneration ? (
           "Free generation available"
         ) : (

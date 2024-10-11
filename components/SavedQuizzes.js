@@ -34,7 +34,7 @@ export default function SavedQuizzes({
   return (
     <Card className="col-span-1 md:col-span-2">
       <CardHeader className="shadow-sm">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
           <CardTitle>Saved Quizzes</CardTitle>
           <Input
             placeholder="Search by title, question, option or answer..."
