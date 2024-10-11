@@ -10,7 +10,6 @@ export async function GET() {
     if (!session) {
       return new Response(JSON.stringify({ error: "Not authenticated" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" },
       });
     }
 
@@ -20,13 +19,11 @@ export async function GET() {
 
     return new Response(JSON.stringify({ userHasAccess }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error fetching user access:", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
     });
   }
 }
