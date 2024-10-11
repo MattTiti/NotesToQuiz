@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
@@ -8,22 +9,19 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return new Response(JSON.stringify({ error: "Not authenticated" }), {
-        status: 401,
-      });
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
     await connectMongo();
     const user = await User.findById(session.user.id);
     const userHasAccess = user?.hasAccess || false;
 
-    return new Response(JSON.stringify({ userHasAccess }), {
-      status: 200,
-    });
+    return NextResponse.json({ userHasAccess }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user access:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), {
-      status: 500,
-    });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

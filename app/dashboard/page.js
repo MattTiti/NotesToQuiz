@@ -2,21 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SignIn from "@/components/SignIn";
-import ButtonCheckout from "@/components/ButtonCheckout";
 import config from "@/config";
 import ButtonAccount from "@/components/ButtonAccount";
 import Image from "next/image";
-import { Upload } from "lucide-react";
 import { extractTextFromFile } from "@/libs/fileExtractor";
-import Spinner from "@/components/Spinner";
-import GenerationHeader from "@/components/GenerationHeader";
-import { WandSparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import Feedback from "@/components/Feedback";
 import toast from "react-hot-toast";
 import QuizDialog from "@/components/QuizDialog";
@@ -36,12 +26,12 @@ export default function QuizGenerator() {
   const [generatedQuiz, setGeneratedQuiz] = useState(null);
   const [quizType, setQuizType] = useState("mc");
   const [numQuestions, setNumQuestions] = useState("5");
-  const plan = config.stripe.plans[0];
   const [disabled, setDisabled] = useState(false);
   const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
   const [isSaveQuizDialogOpen, setIsSaveQuizDialogOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const plan = config.stripe.plans[0];
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -77,7 +67,6 @@ export default function QuizGenerator() {
     const data = await response.json();
     setDisabled(data.userHasAccess);
     setHasPurchased(data.userHasAccess);
-    console.log(data.userHasAccess);
   };
 
   const handleTextSubmit = async () => {
