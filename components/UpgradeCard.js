@@ -11,7 +11,7 @@ export default function UpgradeCard({ plan }) {
             <CardTitle className="text-xl font-bold">
               Upgrade to Unlimited
             </CardTitle>
-            <Badge className="bg-neutral-300 text-black/60">
+            <Badge className="bg-emerald-500 text-white">
               <p className="text-sm uppercase font-semibold">
                 {`Under $${plan.perMonthPrice}/month`}
               </p>
@@ -51,9 +51,6 @@ export default function UpgradeCard({ plan }) {
                 mode={plan.mode}
                 className="w-full bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-semibold"
               />
-              <p className="text-sm text-center text-neutral-700/80 font-medium mt-2">
-                {plan.buttonMessage}
-              </p>
             </div>
           </div>
         </CardContent>

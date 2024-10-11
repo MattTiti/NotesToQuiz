@@ -35,6 +35,15 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Add these fields to your existing User model
+    tokens: {
+      type: Number,
+      default: 3,
+    },
+    lastUsed: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,

@@ -6,6 +6,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { Infinity } from "lucide-react";
 
 const GenerationHeader = ({
   quizType,
@@ -13,16 +14,16 @@ const GenerationHeader = ({
   numQuestions,
   setNumQuestions,
   disabled,
+  tokens,
+  hasFreeGeneration,
 }) => {
   return (
-    <CardHeader>
+    <CardHeader className="pb-1 space-y-0">
       <div className="flex items-center justify-between gap-4">
         <CardTitle>Generate a Quiz</CardTitle>
+
         <div className="flex w-1/4 gap-2">
-          <Select
-            value={quizType}
-            onChange={(e) => setQuizType(e.target.value)}
-          >
+          <Select value={quizType} onValueChange={setQuizType}>
             <SelectTrigger>
               <SelectValue placeholder="Select quiz type" />
             </SelectTrigger>
@@ -37,10 +38,7 @@ const GenerationHeader = ({
               </SelectItem>
             </SelectContent>
           </Select>
-          <Select
-            value={numQuestions}
-            onChange={(e) => setNumQuestions(e.target.value)}
-          >
+          <Select value={numQuestions} onValueChange={setNumQuestions}>
             <SelectTrigger>
               <SelectValue placeholder="Select # of questions" />
             </SelectTrigger>
@@ -57,6 +55,33 @@ const GenerationHeader = ({
           </Select>
         </div>
       </div>
+      <span className="text-sm text-muted-foreground ml-1">
+        {hasFreeGeneration ? (
+          "Free generation available"
+        ) : (
+          <>
+            {!disabled && (
+              <span className="flex items-center">
+                <Infinity className="w-4 h-4 mr-1" /> Unlimited tokens &
+                characters
+              </span>
+            )}
+            {disabled &&
+              tokens > 0 &&
+              `${tokens} token${
+                tokens !== 1 ? "s" : ""
+              } remaining (10,000 character limit)`}
+            {disabled &&
+              tokens === 0 &&
+              "0 tokens remaining (10,000 character limit)"}
+            {!hasFreeGeneration && !tokens && tokens !== 0 && (
+              <span className="flex items-center">
+                Sign Up to generate more quizzes
+              </span>
+            )}
+          </>
+        )}
+      </span>
     </CardHeader>
   );
 };

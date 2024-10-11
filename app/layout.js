@@ -7,7 +7,7 @@ import "./globals.css";
 const font = Bricolage_Grotesque({ subsets: ["latin"] });
 
 export const viewport = {
-  themeColor: "#fefce8",
+  themeColor: "#fff",
   width: "device-width",
   initialScale: 1,
 };
@@ -16,11 +16,7 @@ export const metadata = getSEOTags();
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      data-theme="#fefce8"
-      className={font.className + " bg-yellow-50"}
-    >
+    <html lang="en" data-theme="#fff" className={font.className + " bg-white"}>
       <head>
         <script
           async

@@ -13,8 +13,8 @@ const config = {
       {
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1Q8PD5LWN7g4oB0Yuo3vNlRZ"
-            : "price_1Q8PD5LWN7g4oB0Yuo3vNlRZ",
+            ? "price_1Q8opoLWN7g4oB0YwsxO5Sjh"
+            : "price_1Q8opoLWN7g4oB0YwsxO5Sjh",
         name: "Monthly",
         mode: "subscription",
         description: "Unlimited access to NotesToQuiz",
@@ -22,6 +22,7 @@ const config = {
         priceAnchor: 29.99,
         features: [
           { name: "Unlimited quiz generation tokens" },
+          { name: "Unlimited characters" },
           { name: "Access to 15+ question quizzes" },
           { name: "Access to all question types" },
         ],
@@ -44,7 +45,7 @@ const config = {
   },
   auth: {
     loginUrl: "/api/auth/signin",
-    callbackUrl: "/custom",
+    callbackUrl: "/",
   },
   googleAnalyticsId: "",
 };

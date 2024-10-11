@@ -32,8 +32,8 @@ export const metadata = getSEOTags({
 
 const PrivacyPolicy = () => {
   return (
-    <main className="bg-yellow-50 text-neutral-700">
-      <div className="max-w-xl mx-auto bg-yellow-50 text-neutral-700">
+    <main className="bg-white text-neutral-700">
+      <div className="max-w-xl mx-auto bg-white text-neutral-700">
         <div className="p-5">
           <Link href="/" className="btn btn-ghost">
             <svg
@@ -58,13 +58,13 @@ const PrivacyPolicy = () => {
             className="leading-relaxed whitespace-pre-wrap"
             style={{ fontFamily: "sans-serif" }}
           >
-            {`Last Updated: August 15, 2024
+            {`Last Updated: October 11, 2024
 
-Welcome to GoodMornin (the "Website"). This Privacy Policy explains how we collect, use, and protect your personal information when you use the Website operated by GoodMornin ("we," "our," or "us").
+Welcome to NotesToQuiz (the "Website"). This Privacy Policy explains how we collect, use, and protect your personal information when you use the Website operated by NotesToQuiz ("we," "our," or "us").
 
 1. Information We Collect
 
-Personal Data: We collect your name, email address, phone number, and payment information when you use our Website.
+Personal Data: We collect your name, email address, and payment information when you use buy a subscription to our Website. We collect name and email address when you sign up for a free account.
 Non-Personal Data: We also collect non-personal data through the use of web cookies.
 2. Purpose of Data Collection
 
@@ -72,7 +72,7 @@ We collect your personal data to process orders and provide you with our service
 
 3. Data Sharing
 
-We do not share your personal data with any third parties. Your information is used solely by GoodMornin to provide and improve our services.
+We do not share your personal data with any third parties. Your information is used solely by NotesToQuiz to provide and improve our services.
 
 4. Children's Privacy
 
@@ -84,7 +84,7 @@ We may update this Privacy Policy from time to time. If we make any changes, we 
 
 6. Contact Information
 
-If you have any questions or concerns about this Privacy Policy, please contact us at matt@goodmornin.app.
+If you have any questions or concerns about this Privacy Policy, please contact us at matt@mg.notestoquiz.com.
 
 `}
           </pre>

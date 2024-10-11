@@ -32,8 +32,8 @@ export const metadata = getSEOTags({
 
 const TOS = () => {
   return (
-    <main className="bg-yellow-50 text-neutral-700">
-      <div className="max-w-xl mx-auto bg-yellow-50 text-neutral-700">
+    <main className="bg-white text-neutral-700">
+      <div className="max-w-xl mx-auto bg-white text-neutral-700">
         <div className="p-5">
           <Link href="/" className="btn btn-ghost">
             <svg
@@ -58,9 +58,9 @@ const TOS = () => {
             className="leading-relaxed whitespace-pre-wrap"
             style={{ fontFamily: "sans-serif" }}
           >
-            {`Last Updated: August 15, 2024
+            {`Last Updated: October 11, 2024
 
-Welcome to GoodMornin (the "Website"). These Terms & Services ("Terms") govern your use of the Website operated by GoodMornin ("we," "our," or "us"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the Website.
+Welcome to NotesToQuiz (the "Website"). These Terms & Services ("Terms") govern your use of the Website operated by NotesToQuiz ("we," "our," or "us"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the Website.
 
 1. Use of the Website
 
@@ -76,7 +76,7 @@ All payments made on the Website are subject to our payment terms. You are respo
 
 4. Intellectual Property
 
-All content on the Website, including text, graphics, logos, and software, is the property of GoodMornin and is protected by intellectual property laws. You may not reproduce, distribute, or create derivative works from any content on the Website without our express written permission.
+All content on the Website, including text, graphics, logos, and software, is the property of NotesToQuiz and is protected by intellectual property laws. You may not reproduce, distribute, or create derivative works from any content on the Website without our express written permission.
 
 5. Limitation of Liability
 
@@ -92,7 +92,7 @@ We may update these Terms from time to time. If we make any changes, we will not
 
 8. Contact Information
 
-If you have any questions about these Terms, please contact us at matt@goodmornin.app.`}
+If you have any questions about these Terms, please contact us at matt@mg.notestoquiz.com.`}
           </pre>
         </div>
       </div>

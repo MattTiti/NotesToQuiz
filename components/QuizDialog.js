@@ -9,8 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-
-export default function QuizDialog({ quiz, isOpen, onClose, onSave }) {
+import { Textarea } from "@/components/ui/textarea";
+export default function QuizDialog({
+  quiz,
+  isOpen,
+  onClose,
+  onSave,
+  hasPurchased,
+}) {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
 
@@ -68,7 +74,8 @@ export default function QuizDialog({ quiz, isOpen, onClose, onSave }) {
                 </div>
               ))}
             </RadioGroup>
-            {showCorrectAnswers && (
+            {question.type === "sa" && <Textarea />}
+            {showCorrectAnswers && question.type !== "sa" && (
               <p
                 className={`mt-2 ${
                   selectedAnswers[index] === question.answer
@@ -78,6 +85,9 @@ export default function QuizDialog({ quiz, isOpen, onClose, onSave }) {
               >
                 Correct answer: {question.answer}
               </p>
+            )}
+            {showCorrectAnswers && question.type === "sa" && (
+              <p className="text-black/50">Correct answer: {question.answer}</p>
             )}
           </div>
         ))}
@@ -93,7 +103,7 @@ export default function QuizDialog({ quiz, isOpen, onClose, onSave }) {
               <Button onClick={handleRestart} variant="outline">
                 Restart
               </Button>
-              {!isSavedQuiz && (
+              {!isSavedQuiz && hasPurchased && (
                 <Button onClick={onSave} variant="outline">
                   Save
                 </Button>

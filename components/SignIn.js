@@ -31,17 +31,15 @@ export default function SignIn({ isOpen }) {
   const handleEmailSignIn = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    signIn("email", { email, callbackUrl: "/dashboard" });
+    signIn("email", { email, callbackUrl: "/" });
   };
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} close="false">
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sign In</DialogTitle>
-          <DialogDescription>
-            Sign in to access the quiz generator
-          </DialogDescription>
+          <DialogTitle>Sign In or Sign Up</DialogTitle>
+          <DialogDescription>No ads, no payment required.</DialogDescription>
         </DialogHeader>
         {isLoading ? (
           <div className="flex justify-center items-center h-40">
@@ -65,9 +63,7 @@ export default function SignIn({ isOpen }) {
                   provider.name !== "Email" && (
                     <Button
                       key={provider.name}
-                      onClick={() =>
-                        signIn(provider.id, { callbackUrl: "/dashboard" })
-                      }
+                      onClick={() => signIn(provider.id, { callbackUrl: "/" })}
                       className="w-full"
                       variant="outline"
                     >

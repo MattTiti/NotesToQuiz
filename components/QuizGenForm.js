@@ -3,8 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GenerationHeader from "@/components/GenerationHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { WandSparkles, Upload, File, FileText, Loader2 } from "lucide-react";
+import { WandSparkles, Upload, File, FileText } from "lucide-react";
 import Spinner from "@/components/Spinner";
+import { Badge } from "@/components/ui/badge";
+
+const MAX_CHARACTERS = 10000;
 
 export default function QuizGenForm({
   quizType,
@@ -22,14 +25,27 @@ export default function QuizGenForm({
   setIsQuizDialogOpen,
   loading,
   setGeneratedQuiz,
+  tokens,
+  hasFreeGeneration,
 }) {
-  return (
-    <Tabs defaultValue="text" className="mb-8">
-      <TabsList>
-        <TabsTrigger value="text">Input Text</TabsTrigger>
-        <TabsTrigger value="file">Upload File</TabsTrigger>
-      </TabsList>
+  const handleTextChange = (e) => {
+    const newText = e.target.value;
+    if (newText.length <= MAX_CHARACTERS) {
+      setText(newText);
+    }
+  };
 
+  return (
+    <Tabs defaultValue="file" className="mb-8">
+      <div className="flex justify-between items-center">
+        <TabsList>
+          <TabsTrigger value="file">Upload File</TabsTrigger>
+          <TabsTrigger value="text">Input Text</TabsTrigger>
+        </TabsList>
+        <Badge className="bg-rose-600 hover:bg-rose-600">
+          NO ADS. NO PAYMENT REQUIRED.
+        </Badge>
+      </div>
       <TabsContent value="text">
         <Card>
           <GenerationHeader
@@ -38,19 +54,27 @@ export default function QuizGenForm({
             numQuestions={numQuestions}
             setNumQuestions={setNumQuestions}
             disabled={disabled}
+            tokens={tokens}
+            hasFreeGeneration={hasFreeGeneration}
           />
           <CardContent>
             {loading ? (
               <Spinner />
             ) : (
-              <Textarea
-                placeholder="Enter your text here..."
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="mb-4 min-h-[200px]"
-              />
+              <>
+                <Textarea
+                  placeholder="Enter your text here..."
+                  value={text}
+                  onChange={handleTextChange}
+                  className="mb-1 min-h-[200px]"
+                  maxLength={MAX_CHARACTERS}
+                />
+                <div className="text-sm text-gray-500 text-right">
+                  {text.length}/{MAX_CHARACTERS} characters
+                </div>
+              </>
             )}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-4 ">
               {generatedQuiz && (
                 <Button
                   onClick={() => setIsQuizDialogOpen(true)}
@@ -60,7 +84,7 @@ export default function QuizGenForm({
                   View Last Quiz
                 </Button>
               )}
-              <div className="flex justify-end mt-4 w-full gap-2">
+              <div className="flex justify-end w-full gap-2 items-center">
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -92,6 +116,8 @@ export default function QuizGenForm({
             numQuestions={numQuestions}
             setNumQuestions={setNumQuestions}
             disabled={disabled}
+            tokens={tokens}
+            hasFreeGeneration={hasFreeGeneration}
           />
           <CardContent>
             <div className="flex items-center justify-center w-full">
