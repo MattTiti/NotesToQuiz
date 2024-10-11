@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": ">=22.9.0"
+    "node": "20.x"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^1.0.0",
