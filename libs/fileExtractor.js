@@ -1,5 +1,6 @@
-import * as pdfjsLib from "pdfjs-dist/webpack";
-import mammoth from "mammoth";
+const pdfjsLib =
+  typeof window !== "undefined" ? require("pdfjs-dist/webpack") : null;
+const mammoth = typeof window !== "undefined" ? require("mammoth") : null;
 
 export async function extractTextFromFile(file) {
   const fileType = file.type;
