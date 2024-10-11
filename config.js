@@ -13,19 +13,20 @@ const config = {
       {
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1Q4jjPCKVO6FKkF1pPndI3hV"
-            : "price_1Q4jjPCKVO6FKkF1pPndI3hV",
+            ? "price_1Q8PD5LWN7g4oB0Yuo3vNlRZ"
+            : "price_1Q8PD5LWN7g4oB0Yuo3vNlRZ",
         name: "Monthly",
         mode: "subscription",
-        description: "Daily text subscription billed monthly",
-        price: 3.99,
-        priceAnchor: 7.99,
+        description: "Unlimited access to NotesToQuiz",
+        price: 19.99,
+        priceAnchor: 29.99,
         features: [
-          { name: "Daily message service (Text & Email)" },
-          { name: "Message customization" },
-          { name: "GoodMornin Dashboard" },
+          { name: "Unlimited quiz generation tokens" },
+          { name: "Access to 15+ question quizzes" },
+          { name: "Access to all question types" },
         ],
         buttonMessage: "Low commitment, high reward",
+        perMonthPrice: 1.99,
       },
     ],
   },
@@ -39,7 +40,7 @@ const config = {
   colors: {
     theme: "dark",
     main: themes["dark"]["primary"],
-    toast: "#eab308",
+    toast: "#4f46e5",
   },
   auth: {
     loginUrl: "/api/auth/signin",

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
 import connectMongo from "@/libs/mongoose";
-import configFile from "@/config";
 import User from "@/models/User";
 import { findCheckoutSession } from "@/libs/stripe";
 

@@ -2,56 +2,62 @@ import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
 export async function POST(req) {
-  const { bankStatement } = await req.json();
+  // Get the text (notes) from the request body
+  const { text, type, numQuestions } = await req.json();
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  let questionType = "";
+
+  if (type === "mc") {
+    questionType = "multiple choice only ";
+  } else if (type === "sa") {
+    questionType = "short answer only ";
+  } else if (type === "tf") {
+    questionType = "true/false only ";
+  } else {
+    questionType = "multiple choice only ";
+  }
+
   try {
+    // Send request to OpenAI to generate quiz questions from the provided text
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            "You are a specialized assistant tasked with accurately parsing bank statements. Your goal is to extract expense details such as the exact name and cost directly from the statement text, without making up or altering any information. Categories should be inferred from the content based on predefined categories.",
+            'You are a specialized assistant tasked with creating quiz questions from text. The quiz questions can be of 3 types: multiple choice (mc), short answer (sa), or true/false (tf). If it\'s a multiple choice question, provide options. Return the quiz as a valid JSON array with the following format: [{"question": "", "answer": "", "type": "mc or sa", "options": []}]. If it\'s a short answer question, leave the options array empty. If it\'s a true/false question, provide two options. If it\'s a fill in the blank question, provide one option.',
         },
         {
           role: "user",
-          content: `Please extract the expenses from the following bank statement. For each expense:
-- **Name**: Take the name exactly as it appears in the statement.
-- **Cost**: Take the cost as a numeric value directly from the statement.
-- **Category**: Infer the category from the context using these categories: groceries, dining, entertainment, transportation, housing, subscriptions, health, vacation, and other.
-
-**Do not generate or infer names or costs that are not explicitly mentioned in the bank statement.** Return the data as a valid JSON string array in this format:
-\`[{"name": "Exact name from statement", "cost": "Cost from statement", "category": "Inferred category"}]\`
-
-Here is the bank statement:
-${bankStatement}`,
+          content: `Generate a ${numQuestions} question ${questionType}quiz from the following text: \n${text}`,
         },
       ],
     });
 
-    // Log the response content before parsing
+    // Extract the response content from OpenAI
     let content = completion.choices[0].message.content;
-
-    // Use a regex to extract the content inside the square brackets
+    console.log("Content:", content);
+    // Use a regex to extract the JSON array from the response
     const jsonArrayMatch = content.match(/\[.*\]/s);
     if (jsonArrayMatch) {
-      content = jsonArrayMatch[0]; // Get the first match which should be the JSON array
+      content = jsonArrayMatch[0]; // Get the first match, which should be the JSON array
     } else {
       throw new Error("No JSON array found in the response.");
     }
 
-    // Attempt to parse the sanitized content as JSON
-    const parsedExpenses = JSON.parse(content);
+    // Parse the JSON array of quiz questions
+    const parsedQuiz = JSON.parse(content);
 
-    return NextResponse.json({ expenses: parsedExpenses });
+    // Return the quiz questions as JSON
+    return NextResponse.json({ quiz: parsedQuiz });
   } catch (error) {
-    console.error("Error parsing bank statement:", error);
+    console.error("Error generating quiz:", error);
     return NextResponse.json(
-      { error: "Error parsing bank statement" },
+      { error: "Error generating quiz" },
       { status: 500 }
     );
   }

@@ -19,7 +19,7 @@ const ButtonCheckout = ({ priceId, mode = "payment" }) => {
       const res = await apiClient.post("/stripe/create-checkout", {
         priceId,
         mode,
-        successUrl: `${window.location.origin}/custom`,
+        successUrl: `${window.location.origin}/dashboard`,
         cancelUrl: window.location.href,
       });
 
@@ -32,20 +32,23 @@ const ButtonCheckout = ({ priceId, mode = "payment" }) => {
   };
 
   return (
-    <Button className="w-full p-6 group" onClick={() => handlePayment()}>
+    <Button
+      className="w-full p-6 group bg-indigo-600 hover:bg-indigo-600/90"
+      onClick={() => handlePayment()}
+    >
       {isLoading ? (
         <span className="loading loading-spinner loading-xs"></span>
       ) : (
         <Image
-          src="/icon.png"
+          src="/stretch-icon.png"
           alt={`${config.appName} logo`}
-          className="w-5 h-5 fill-primary-content group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200 mr-2"
+          className="w-7 h-7 fill-primary-content group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200 mr-2"
           priority={true}
           width={32}
           height={32}
         />
       )}
-      Get {config?.appName}
+      Upgrade to Unlimited
     </Button>
   );
 };

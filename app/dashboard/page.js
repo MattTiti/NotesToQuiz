@@ -1,30 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SignIn from "@/components/SignIn";
 import ButtonCheckout from "@/components/ButtonCheckout";
 import config from "@/config";
-
-// Assume these functions fetch data from an API
-async function fetchSavedQuizzes(userId) {
-  // This is a placeholder. Replace with actual API call.
-  return [
-    { id: 1, title: "History Quiz", createdAt: "2023-06-01" },
-    { id: 2, title: "Science Quiz", createdAt: "2023-06-02" },
-    { id: 3, title: "Math Quiz", createdAt: "2023-06-03" },
-  ];
-}
-
-async function checkUserPurchase(userId) {
-  // This is a placeholder. Replace with actual API call.
-  return false; // Assume the user hasn't made a purchase
-}
+import ButtonAccount from "@/components/ButtonAccount";
+import Image from "next/image";
+import { Upload } from "lucide-react";
+import { extractTextFromFile } from "@/libs/fileExtractor";
+import Spinner from "@/components/Spinner";
+import GenerationHeader from "@/components/GenerationHeader";
+import { WandSparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import Feedback from "@/components/Feedback";
+import toast from "react-hot-toast";
+import QuizDialog from "@/components/QuizDialog";
+import SaveQuizDialog from "@/components/SaveQuizDialog";
+import QuizGenForm from "@/components/QuizGenForm";
+import SavedQuizzes from "@/components/SavedQuizzes";
+import UpgradeCard from "@/components/UpgradeCard";
 
 export default function QuizGenerator() {
   const [text, setText] = useState("");
@@ -33,6 +32,16 @@ export default function QuizGenerator() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [savedQuizzes, setSavedQuizzes] = useState([]);
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [generatedQuiz, setGeneratedQuiz] = useState(null);
+  const [quizType, setQuizType] = useState("mc");
+  const [numQuestions, setNumQuestions] = useState("5");
+  const plan = config.stripe.plans[0];
+  const [disabled, setDisabled] = useState(false);
+  const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
+  const [isSaveQuizDialogOpen, setIsSaveQuizDialogOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -44,130 +53,181 @@ export default function QuizGenerator() {
 
   useEffect(() => {
     if (session?.user?.id) {
-      fetchSavedQuizzes(session.user.id).then(setSavedQuizzes);
-      checkUserPurchase(session.user.id).then(setHasPurchased);
+      fetchSavedQuizzes();
+      checkUserPurchase();
     }
   }, [session]);
 
-  const handleTextSubmit = () => {
-    // TODO: Implement quiz generation from text
-    console.log("Generating quiz from text:", text);
+  const fetchSavedQuizzes = async () => {
+    try {
+      const response = await fetch("/api/quizzes");
+      if (!response.ok) {
+        throw new Error("Failed to fetch quizzes");
+      }
+      const quizzes = await response.json();
+      setSavedQuizzes(quizzes);
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+      toast.error("Failed to fetch quizzes");
+    }
   };
 
-  const handleFileSubmit = () => {
-    // TODO: Implement quiz generation from file
-    console.log("Generating quiz from file:", file);
+  const checkUserPurchase = async () => {
+    const response = await fetch("/api/access");
+    const data = await response.json();
+    setDisabled(data.userHasAccess);
+    setHasPurchased(data.userHasAccess);
+    console.log(data.userHasAccess);
   };
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+  const handleTextSubmit = async () => {
+    if (text) {
+      try {
+        setLoading(true);
+        await generateQuiz({ text, type: quizType, numQuestions });
+      } catch (error) {
+        console.error("Error generating quiz from text:", error);
+        setLoading(false);
+        toast.error("Error generating quiz from text");
+      }
+    } else {
+      toast.error("Please enter some text");
+    }
   };
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  const handleFileSubmit = async () => {
+    if (file) {
+      try {
+        setLoading(true);
+        const text = await extractTextFromFile(file);
+        await generateQuiz({ text, type: quizType, numQuestions });
+      } catch (error) {
+        console.error("Error extracting text from file:", error);
+        setLoading(false);
+        toast.error("Error extracting text from file");
+      }
+    } else {
+      toast.error("No file selected");
+    }
+  };
+
+  const generateQuiz = async ({ text, type, numQuestions }) => {
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text, type, numQuestions }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setGeneratedQuiz(data.quiz);
+      setIsQuizDialogOpen(true);
+    } catch (error) {
+      console.error("Error generating quiz:", error);
+      toast.error("Error generating quiz");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInitiateSaveQuiz = () => {
+    setIsQuizDialogOpen(false);
+    setIsSaveQuizDialogOpen(true);
+  };
+
+  const handleSaveQuiz = async () => {
+    setIsSaveQuizDialogOpen(false);
+    try {
+      const response = await fetch("/api/quizzes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, questions: generatedQuiz }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save quiz");
+      }
+      toast.success("Quiz saved successfully");
+      fetchSavedQuizzes();
+    } catch (error) {
+      console.error("Error saving quiz:", error);
+      toast.error("Failed to save quiz");
+    }
+  };
+
+  const handleQuizClick = (quiz) => {
+    setSelectedQuiz(quiz);
+    setIsQuizDialogOpen(true);
+  };
 
   return (
     <>
       <SignIn isOpen={showSignIn} />
-      <div className="container mx-auto p-4">
+      <div className="mx-auto min-h-screen bg-white px-8 py-4">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Quiz Generator</h1>
-          {session && (
-            <Button onClick={handleSignOut} variant="outline">
-              Sign Out
-            </Button>
-          )}
+          <div className="flex items-center justify-center">
+            <Image
+              src="/stretch-icon.png"
+              alt={`${config.appName} logo`}
+              className="w-10 h-10 fill-primary-content group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200 mr-2"
+              priority={true}
+              width={100}
+              height={100}
+            />
+            <h1 className="text-2xl font-bold">NotesToQuiz</h1>
+          </div>
+          {session && <ButtonAccount />}
         </div>
-
-        <Tabs defaultValue="text" className="mb-8">
-          <TabsList>
-            <TabsTrigger value="text">Input Text</TabsTrigger>
-            <TabsTrigger value="file">Upload File</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="text">
-            <Card>
-              <CardHeader>
-                <CardTitle>Generate Quiz from Text</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  placeholder="Enter your text here..."
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  className="mb-4"
-                />
-                <Button onClick={handleTextSubmit}>Generate Quiz</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="file">
-            <Card>
-              <CardHeader>
-                <CardTitle>Generate Quiz from File</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Input
-                  type="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  className="mb-4"
-                />
-                <Button onClick={handleFileSubmit}>Generate Quiz</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
+        <QuizGenForm
+          quizType={quizType}
+          setQuizType={setQuizType}
+          numQuestions={numQuestions}
+          setNumQuestions={setNumQuestions}
+          disabled={disabled}
+          text={text}
+          setText={setText}
+          file={file}
+          setFile={setFile}
+          generatedQuiz={generatedQuiz}
+          handleTextSubmit={handleTextSubmit}
+          handleFileSubmit={handleFileSubmit}
+          setIsQuizDialogOpen={setIsQuizDialogOpen}
+          loading={loading}
+          setGeneratedQuiz={setGeneratedQuiz}
+        />
         {session && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Saved Quizzes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {savedQuizzes.length > 0 ? (
-                  <ul className="space-y-2">
-                    {savedQuizzes.map((quiz) => (
-                      <li
-                        key={quiz.id}
-                        className="flex justify-between items-center p-2 bg-secondary rounded-md"
-                      >
-                        <span>{quiz.title}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {quiz.createdAt}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No saved quizzes yet.</p>
-                )}
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <SavedQuizzes
+              savedQuizzes={savedQuizzes}
+              handleQuizClick={handleQuizClick}
+            />
 
-            {!hasPurchased && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upgrade to Pro</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <ul className="list-disc list-inside space-y-2">
-                      <li>Unlimited quiz generation</li>
-                      <li>Save and edit your quizzes</li>
-                      <li>Advanced question types</li>
-                      <li>Priority support</li>
-                    </ul>
-                    <ButtonCheckout priceId={config.stripe.plans[0].priceId} />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {!hasPurchased ? <UpgradeCard plan={plan} /> : <Feedback />}
           </div>
         )}
       </div>
+      <QuizDialog
+        quiz={selectedQuiz || generatedQuiz}
+        isOpen={isQuizDialogOpen}
+        onClose={() => {
+          setIsQuizDialogOpen(false);
+          setSelectedQuiz(null);
+        }}
+        onSave={handleInitiateSaveQuiz}
+      />
+      <SaveQuizDialog
+        title={title}
+        setTitle={setTitle}
+        isOpen={isSaveQuizDialogOpen}
+        onClose={() => setIsSaveQuizDialogOpen(false)}
+        onSave={handleSaveQuiz}
+      />
     </>
   );
 }
