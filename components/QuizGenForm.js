@@ -68,7 +68,7 @@ export default function QuizGenForm({
             ) : (
               <>
                 <Textarea
-                  placeholder="Enter your text here..."
+                  placeholder="Enter notes, topics, keywords, or any other text here..."
                   value={text}
                   onChange={handleTextChange}
                   className="mb-1 min-h-[200px]"

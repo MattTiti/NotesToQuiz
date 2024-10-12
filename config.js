@@ -47,7 +47,7 @@ const config = {
     loginUrl: "/api/auth/signin",
     callbackUrl: "/",
   },
-  googleAnalyticsId: "",
+  googleAnalyticsId: "G-KBX6PL09QD",
 };
 
 export default config;

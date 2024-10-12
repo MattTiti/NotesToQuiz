@@ -35,8 +35,8 @@ export default function SignIn({ isOpen }) {
   };
 
   return (
-    <Dialog open={isOpen} close="false">
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} showCloseButton={false}>
+      <DialogContent className="sm:max-w-[425px]" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Sign In or Sign Up</DialogTitle>
           <DialogDescription>No ads, no payment required.</DialogDescription>
