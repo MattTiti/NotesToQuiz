@@ -30,7 +30,10 @@ export default function QuizGenForm({
 }) {
   const handleTextChange = (e) => {
     const newText = e.target.value;
-    if (newText.length <= MAX_CHARACTERS) {
+
+    if (disabled && newText.length <= MAX_CHARACTERS) {
+      setText(newText);
+    } else if (!disabled) {
       setText(newText);
     }
   };
@@ -72,11 +75,13 @@ export default function QuizGenForm({
                   value={text}
                   onChange={handleTextChange}
                   className="mb-1 min-h-[200px]"
-                  maxLength={MAX_CHARACTERS}
+                  maxLength={disabled ? MAX_CHARACTERS : undefined}
                 />
-                <div className="text-sm text-gray-500 text-right">
-                  {text.length}/{MAX_CHARACTERS} characters
-                </div>
+                {disabled && (
+                  <div className="text-sm text-gray-500 text-right">
+                    {text.length}/{MAX_CHARACTERS} characters
+                  </div>
+                )}
               </>
             )}
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2">
