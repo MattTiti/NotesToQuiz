@@ -53,9 +53,16 @@ const Footer = () => {
                     Support
                   </a>
                 )}
-                <Link href="/#pricing" className="link link-hover">
-                  Pricing
-                </Link>
+                <a
+                  href="https://theresanaiforthat.com/ai/notestoquiz/?ref=featured&v=2981268"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  <img
+                    width="300"
+                    src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600"
+                  ></img>
+                </a>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 w-full px-4">
