@@ -29,7 +29,7 @@ export async function POST(req) {
         {
           role: "system",
           content:
-            'You are a specialized assistant tasked with creating quiz questions from text. The quiz questions can be of 3 types: multiple choice (mc), short answer (sa), or true/false (tf). If it\'s a multiple choice question, provide options. Return the quiz as a valid JSON array with the following format: [{"question": "", "answer": "", "type": "mc or sa", "options": []}]. If it\'s a short answer question, leave the options array empty. If it\'s a true/false question, provide two options. If it\'s a fill in the blank question, provide one option.',
+            'You are a specialized assistant tasked with creating quiz questions from text. The quiz questions can be of 3 types: multiple choice (mc), short answer (sa), or true/false (tf). If it\'s a multiple choice question, provide options and make sure the answer is one of the options. Return the quiz as a valid JSON array with the following format: [{"question": "", "answer": "", "type": "mc or sa", "options": []}]. If it\'s a short answer question, leave the options array empty. If it\'s a true/false question, provide two options. If it\'s a fill in the blank question, provide one option.',
         },
         {
           role: "user",
