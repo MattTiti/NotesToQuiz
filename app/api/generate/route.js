@@ -43,8 +43,6 @@ export async function POST(req) {
     // Extract the response content from OpenAI
     let content = completion.choices[0].message.content;
 
-    console.log(content);
-
     // Use a regex to extract the JSON array from the response
     const jsonArrayMatch = content.match(/\[.*\]/s);
     if (jsonArrayMatch) {
