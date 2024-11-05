@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
+export const maxDuration = 30; // This function can run for a maximum of 30 seconds
+export const dynamic = "force-dynamic";
 
 export async function POST(req) {
   // Get the text (notes) from the request body
