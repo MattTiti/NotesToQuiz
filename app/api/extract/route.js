@@ -27,7 +27,8 @@ export async function POST(req) {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       ) {
         const arrayBuffer = await file.arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer });
+        const buffer = Buffer.from(arrayBuffer);
+        const result = await mammoth.extractRawText({ buffer });
         extractedText = result.value;
       } else if (fileType === "text/plain") {
         extractedText = await file.text();
